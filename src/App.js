@@ -20,6 +20,16 @@ function App() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts))
   }, [contacts])
 
+  // localStorage.clear()
+  // console.log(contacts)
+
+  function selectContact(phone){
+    const newContacts = [...contacts]
+    const contact = newContacts.find(contact => contact.phone === phone)
+    contact.isChecked = !contact.isChecked
+    setContacts(newContacts)
+  }
+
   function addContact(e) {
     const firstName = fNameRef.current.value
     const lastName = lNameRef.current.value
@@ -29,13 +39,19 @@ function App() {
 
     if(firstName === '' || lastName === '') return
     setContacts(prevContacts => {
-      return [...prevContacts, {fName: firstName, lName: lastName, phone: phone, email: email, address: address}]
+      return [...prevContacts, {fName: firstName, lName: lastName, phone: phone, email: email,
+        address: address, isChecked: false}]
     })
     fNameRef.current.value = null
     lNameRef.current.value = null
     phoneRef.current.value = null
     emailRef.current.value = null
     addressRef.current.value = null
+  }
+
+  function deleteContact(){
+    const newContacts = contacts.filter(contact => !contact.isChecked)
+    setContacts(newContacts)
   }
 
   return (
@@ -46,8 +62,8 @@ function App() {
     <input ref={emailRef} type='text' placeholder='Email'/>
     <input ref={addressRef} type='text' placeholder='Address'/>
     <button onClick={addContact}>Add Contact</button>
-    <button>Delete Selected Contacts</button>
-    <ContactList contacts = {contacts}/>
+    <button onClick={deleteContact}>Delete Selected Contacts</button>
+    <ContactList contacts = {contacts} selectContact={selectContact} />
     </>
   )
 }
