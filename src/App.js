@@ -1,71 +1,81 @@
-import React, { useState, useRef, useEffect } from 'react';
-import ContactList from './ContactList';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import EditContact from './EditContact';
 
-const LOCAL_STORAGE_KEY = 'contactApp.contacts'
+const LOCAL_STORAGE_KEY = 'contactListApp.contacts';
 
 function App() {
   const [contacts, setContacts] = useState([]);
-  const fNameRef = useRef()
-  const lNameRef = useRef()
-  const phoneRef = useRef()
-  const emailRef = useRef()
-  const addressRef = useRef()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  // Function to retrieve contacts from localStorage
+  const getContactsFromLocalStorage = () => {
+    const storedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return storedContacts ? JSON.parse(storedContacts) : [];
+  };
 
   useEffect(() => {
-    const storedContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
-    if(storedContacts) setContacts(prevContacts => [...prevContacts, ...storedContacts])
-  }, [])
+    // Load contacts from localStorage when the component mounts
+    setContacts(getContactsFromLocalStorage());
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts))
-  }, [contacts])
+    // Save contacts to localStorage whenever the contacts state changes
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
+  }, [contacts]);
 
-  // localStorage.clear()
-  // console.log(contacts)
+  const onSubmit = (data) => {
+    const newContacts = [...contacts, data];
+    setContacts(newContacts);
+    reset();
+  };
 
-  function selectContact(phone){
-    const newContacts = [...contacts]
-    const contact = newContacts.find(contact => contact.phone === phone)
-    contact.isChecked = !contact.isChecked
-    setContacts(newContacts)
-  }
-
-  function addContact(e) {
-    const firstName = fNameRef.current.value
-    const lastName = lNameRef.current.value
-    const phone = phoneRef.current.value
-    const email = emailRef.current.value
-    const address = addressRef.current.value
-
-    if(firstName === '' || lastName === '') return
-    setContacts(prevContacts => {
-      return [...prevContacts, {fName: firstName, lName: lastName, phone: phone, email: email,
-        address: address, isChecked: false}]
-    })
-    fNameRef.current.value = null
-    lNameRef.current.value = null
-    phoneRef.current.value = null
-    emailRef.current.value = null
-    addressRef.current.value = null
-  }
-
-  function deleteContact(){
-    const newContacts = contacts.filter(contact => !contact.isChecked)
-    setContacts(newContacts)
-  }
+  const deleteContact = (index) => {
+    const updatedContacts = [...contacts];
+    updatedContacts.splice(index, 1);
+    setContacts(updatedContacts);
+  };
 
   return (
     <>
-    <input ref={fNameRef} type='text' placeholder='First Name'/>
-    <input ref={lNameRef} type='text' placeholder='Last Name'/>
-    <input ref={phoneRef} type='text' placeholder='Phone Number'/>
-    <input ref={emailRef} type='text' placeholder='Email'/>
-    <input ref={addressRef} type='text' placeholder='Address'/>
-    <button onClick={addContact}>Add Contact</button>
-    <button onClick={deleteContact}>Delete Selected Contacts</button>
-    <ContactList contacts = {contacts} selectContact={selectContact} />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          placeholder='First Name'
+          {...register('firstName', { required: true })}
+        />
+        <input
+          placeholder='Last Name'
+          {...register('lastName', { required: true })}
+        />
+        {errors.lastName && alert('Last name is required')}
+        <input
+          placeholder='Phone Number'
+          {...register('phone', { pattern: /\d+/ })}
+        />
+        {errors.phone && alert('Please enter a valid phone number')}
+        <input placeholder='Email' {...register('email')} />
+        <input placeholder='Address' {...register('address')} />
+        <input type='submit' />
+      </form>
+      <div>
+        <h2>Contacts</h2>
+        <ul>
+          {contacts.map((contact, index) => (
+            <li key={index}>
+              {contact.firstName} {contact.lastName} {contact.phone} {contact.email} {contact.address}
+              <button onClick={() => deleteContact(index)}>Delete Contact</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
-  )
+  );
 }
 
 export default App;
