@@ -1,29 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import EditContact from './EditContact';
+import { Link } from 'react-router-dom';
 
 const LOCAL_STORAGE_KEY = 'contactListApp.contacts';
 
+const getContactsFromLocalStorage = () => {
+  const storedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
+  return storedContacts ? JSON.parse(storedContacts) : [];
+};
+
 function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(() => {
+    // Load contacts from localStorage in the initial state
+    return getContactsFromLocalStorage();
+  });
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
-
-  // Function to retrieve contacts from localStorage
-  const getContactsFromLocalStorage = () => {
-    const storedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return storedContacts ? JSON.parse(storedContacts) : [];
-  };
-
-  useEffect(() => {
-    // Load contacts from localStorage when the component mounts
-    setContacts(getContactsFromLocalStorage());
-  }, []);
 
   useEffect(() => {
     // Save contacts to localStorage whenever the contacts state changes
@@ -44,6 +40,7 @@ function App() {
 
   return (
     <>
+    <h2>Add a Contact</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           placeholder='First Name'
@@ -53,7 +50,6 @@ function App() {
           placeholder='Last Name'
           {...register('lastName', { required: true })}
         />
-        {errors.lastName && alert('Last name is required')}
         <input
           placeholder='Phone Number'
           {...register('phone', { pattern: /\d+/ })}
@@ -64,12 +60,13 @@ function App() {
         <input type='submit' />
       </form>
       <div>
-        <h2>Contacts</h2>
+        <h2>Your Contacts</h2>
         <ul>
           {contacts.map((contact, index) => (
             <li key={index}>
               {contact.firstName} {contact.lastName} {contact.phone} {contact.email} {contact.address}
               <button onClick={() => deleteContact(index)}>Delete Contact</button>
+              <Link to={`/edit/${index}`}>Edit Contact</Link>
             </li>
           ))}
         </ul>
