@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import './styles.css';
+import { VariableSizeList } from 'react-window';
 
 const LOCAL_STORAGE_KEY = 'contactListApp.contacts';
 
@@ -8,6 +11,29 @@ const getContactsFromLocalStorage = () => {
   const storedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
   return storedContacts ? JSON.parse(storedContacts) : [];
 };
+
+const AppContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr; // 2 equal columns
+  gap: 20px;
+`;
+
+const FormContainer = styled.div`
+  background: #f0f0f0;
+  padding: 20px;
+`;
+
+const ContactsContainer = styled.div`
+  background: #fff;
+  padding: 20px;
+`;
+
+const ContactListItem = styled.li`
+  list-style: none;
+  margin-bottom: 10px;
+`;
+
+const getItemSize = (index) => 150;
 
 function App() {
   const [contacts, setContacts] = useState(() => {
@@ -39,40 +65,57 @@ function App() {
   };
 
   return (
-    <>
-    <h2>Add a Contact</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          placeholder='First Name'
-          {...register('firstName', { required: true })}
-        />
-        <input
-          placeholder='Last Name'
-          {...register('lastName', { required: true })}
-        />
-        <input
-          placeholder='Phone Number'
-          {...register('phone', { pattern: /\d+/ })}
-        />
-        {errors.phone && alert('Please enter a valid phone number')}
-        <input placeholder='Email' {...register('email')} />
-        <input placeholder='Address' {...register('address')} />
-        <input type='submit' />
-      </form>
-      <div>
+    <AppContainer>
+      <FormContainer>
+        <h2>Add a Contact</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-group">
+    <label htmlFor="firstName">First Name</label>
+    <input type="text" id="firstName" {...register('firstName', { required: true })} />
+  </div>
+  <div className="input-group">
+    <label htmlFor="lastName">Last Name</label>
+    <input type="text" id="lastName" {...register('lastName', { required: true })} />
+  </div>
+  <div className="input-group">
+    <label htmlFor="phone">Phone Number</label>
+    <input type="tel" id="phone" {...register('phone', { pattern: /\d+/ })} />
+  </div>
+  <div className="input-group">
+    <label htmlFor="email">Email</label>
+    <input type="email" id="email" {...register('email')} />
+  </div>
+  <div className="input-group">
+    <label htmlFor="address">Address</label>
+    <input type="text" id="address" {...register('address')} />
+  </div>
+  <input type="submit" />
+        </form>
+      </FormContainer>
+      <ContactsContainer>
         <h2>Your Contacts</h2>
-        <ul>
-          {contacts.map((contact, index) => (
-            <li key={index}>
-              {contact.firstName} {contact.lastName} {contact.phone} {contact.email} {contact.address}
+        <VariableSizeList
+          height={500} // Adjust the height as needed
+          itemCount={contacts.length}
+          itemSize={getItemSize}
+          width={'100%'}
+        >
+          {({ index, style }) => (
+            <ContactListItem style={style}>
+              <h3>Contact Information</h3>
+              <p><strong>First Name:</strong> {contacts[index].firstName}</p>
+              <p><strong>Last Name:</strong> {contacts[index].lastName}</p>
+              <p><strong>Phone Number:</strong> {contacts[index].phone}</p>
+              <p><strong>Email:</strong> {contacts[index].email}</p>
+              <p><strong>Address:</strong> {contacts[index].address}</p>
               <button onClick={() => deleteContact(index)}>Delete Contact</button>
               <Link to={`/edit/${index}`}>Edit Contact</Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
-  );
+            </ContactListItem>
+          )}
+        </VariableSizeList>
+      </ContactsContainer>
+    </AppContainer>
+  );    
 }
 
 export default App;
