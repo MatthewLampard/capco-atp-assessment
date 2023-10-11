@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import './styles.css';
 import { VariableSizeList } from 'react-window';
+import useThemeChange from './ThemeChange';
 
 const LOCAL_STORAGE_KEY = 'contactListApp.contacts';
 
@@ -19,12 +20,12 @@ const AppContainer = styled.div`
 `;
 
 const FormContainer = styled.div`
-  background: #f0f0f0;
+  background: var(--bg_0);
   padding: 20px;
 `;
 
 const ContactsContainer = styled.div`
-  background: #fff;
+  background: var(--bg_0);
   padding: 20px;
 `;
 
@@ -33,9 +34,10 @@ const ContactListItem = styled.li`
   margin-bottom: 10px;
 `;
 
-const getItemSize = (index) => 150;
+const getItemSize = () => 150;
 
 function App() {
+  const {theme, setTheme} = useThemeChange();
   const [contacts, setContacts] = useState(() => {
     // Load contacts from localStorage in the initial state
     return getContactsFromLocalStorage();
@@ -43,7 +45,6 @@ function App() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     reset,
   } = useForm();
 
@@ -65,6 +66,13 @@ function App() {
   };
 
   return (
+    <>
+    <div className="themeName">Current Theme: {theme.name}</div>
+            <div className="btns">
+                <button onClick={() => setTheme('dark')}>dark</button>
+                <button onClick={() => setTheme('light')}>light</button>
+                <button onClick={() => setTheme('gray')}>gray</button>
+            </div>
     <AppContainer>
       <FormContainer>
         <h2>Add a Contact</h2>
@@ -115,6 +123,7 @@ function App() {
         </VariableSizeList>
       </ContactsContainer>
     </AppContainer>
+    </>
   );    
 }
 

@@ -9,7 +9,8 @@
   
   body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    background-color: var(--bg_0);
+    color: var(--title);
     margin: 0;
     display: flex;
     justify-content: center;
@@ -30,13 +31,15 @@
   }
   
   .FormContainer {
-    background-color: #f0f0f0;
+    background-color: var(--bg_0);
+    color: var(--title);
     padding: 20px;
     border-radius: 8px;
   }
   
   .ContactsContainer {
-    background-color: #fff;
+    background-color: var(--bg_0);
+    color: var(--title);
     padding: 20px;
     border-radius: 8px;
   }
