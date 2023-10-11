@@ -68,36 +68,36 @@ function App() {
   return (
     <>
     <div className="themeName">Current Theme: {theme.name}</div>
-            <div className="btns">
-                <button onClick={() => setTheme('dark')}>dark</button>
-                <button onClick={() => setTheme('light')}>light</button>
-                <button onClick={() => setTheme('gray')}>gray</button>
-            </div>
+      <div className="btns">
+          <button onClick={() => setTheme('dark')}>Dark</button>
+          <button onClick={() => setTheme('light')}>Light</button>
+          <button onClick={() => setTheme('gray')}>Gray</button>
+      </div>
     <AppContainer>
       <FormContainer>
         <h2>Add a Contact</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="input-group">
-    <label htmlFor="firstName">First Name</label>
-    <input type="text" id="firstName" {...register('firstName', { required: true })} />
-  </div>
-  <div className="input-group">
-    <label htmlFor="lastName">Last Name</label>
-    <input type="text" id="lastName" {...register('lastName', { required: true })} />
-  </div>
-  <div className="input-group">
-    <label htmlFor="phone">Phone Number</label>
-    <input type="tel" id="phone" {...register('phone', { pattern: /\d+/ })} />
-  </div>
-  <div className="input-group">
-    <label htmlFor="email">Email</label>
-    <input type="email" id="email" {...register('email')} />
-  </div>
-  <div className="input-group">
-    <label htmlFor="address">Address</label>
-    <input type="text" id="address" {...register('address')} />
-  </div>
-  <input type="submit" />
+          <div className="input-group">
+            <label htmlFor="firstName">First Name</label>
+            <input type="text" id="firstName" {...register('firstName', { required: true })} />
+          </div>
+          <div className="input-group">
+            <label htmlFor="lastName">Last Name</label>
+            <input type="text" id="lastName" {...register('lastName', { required: true })} />
+          </div>
+          <div className="input-group">
+            <label htmlFor="phone">Phone Number</label>
+            <input type="tel" id="phone" {...register('phone', { pattern: /\d+/ })} />
+          </div>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" {...register('email')} />
+          </div>
+          <div className="input-group">
+            <label htmlFor="address">Address</label>
+            <input type="text" id="address" {...register('address')} />
+          </div>
+          <input type="submit" />
         </form>
       </FormContainer>
       <ContactsContainer>
