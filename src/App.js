@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -132,4 +133,4 @@ function App() {
   );    
 }
 
-export default App;
+export default React.memo(App);

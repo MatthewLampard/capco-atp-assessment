@@ -100,4 +100,4 @@ function EditContact() {
   );
 }
 
-export default EditContact;
+export default React.memo(EditContact);
