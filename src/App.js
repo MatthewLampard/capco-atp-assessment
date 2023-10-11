@@ -75,9 +75,9 @@ function App() {
     <>
     <div className="themeName">Current Theme: {theme.name}</div>
       <div className="btns">
-          <button onClick={() => setTheme('dark')}>Dark</button>
-          <button onClick={() => setTheme('light')}>Light</button>
-          <button onClick={() => setTheme('gray')}>Gray</button>
+          <button onClick={() => setTheme('Dark')}>Dark</button>
+          <button onClick={() => setTheme('Light')}>Light</button>
+          <button onClick={() => setTheme('Gray')}>Gray</button>
       </div>
     <AppContainer>
       <FormContainer>

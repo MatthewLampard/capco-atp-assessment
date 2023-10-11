@@ -5,15 +5,15 @@ const base = {
 };
 
 const themes = {
-    dark: {
+    Dark: {
         bg_0: 'rgba(21, 14, 65, 1)',
         title: 'rgba(255, 255, 255, 1)',
     },
-    light: {
+    Light: {
         bg_0: 'rgba(239, 242, 247, 1)',
         title: 'rgba(42, 49, 60, 1)',
     },
-    gray: {
+    Gray: {
         bg_0: 'rgba(35, 42, 63, 1)',
         title: 'rgba(255, 255, 255, 1)',
     },
