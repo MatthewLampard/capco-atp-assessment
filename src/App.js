@@ -57,12 +57,17 @@ function App() {
     const newContacts = [...contacts, data];
     setContacts(newContacts);
     reset();
+    alert('Contact Saved')
   };
 
   const deleteContact = (index) => {
     const updatedContacts = [...contacts];
     updatedContacts.splice(index, 1);
-    setContacts(updatedContacts);
+    if(window.confirm('Are you sure you want to delete this contact?')){
+      setContacts(updatedContacts);
+      alert('Contact Deleted')
+    }
+    else alert('Cancelled')
   };
 
   return (

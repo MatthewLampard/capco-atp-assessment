@@ -45,6 +45,8 @@ function EditContact() {
   
     // Save the updated contacts array back to localStorage
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(parsedContacts));
+
+    alert('Contact Updated')
   
     navigate('/'); // Redirect to the main contacts page
   };
